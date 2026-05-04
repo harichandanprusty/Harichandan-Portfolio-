@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harichandan Prusty — Web Developer</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --navy: #020818;
+    --navy2: #060d24;
+    --navy3: #0a1535;
+    --blue: #3b82f6;
+    --blue-glow: rgba(59,130,246,0.4);
+    --purple: #a855f7;
+    --purple-glow: rgba(168,85,247,0.35);
+    --cyan: #22d3ee;
+    --cyan-glow: rgba(34,211,238,0.3);
+    --glass: rgba(255,255,255,0.04);
+    --glass-border: rgba(255,255,255,0.08);
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --serif: 'Cormorant Garamond', serif;
+    --sans: 'DM Sans', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+  
+  * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+  
+  body {
+    background: var(--navy);
+    color: var(--text);
+    font-family: var(--sans);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ─── CUSTOM CURSOR ─── */
+  #cursor { position: fixed; width: 10px; height: 10px; border-radius: 50%; background: var(--cyan); pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: width .2s, height .2s, opacity .2s; mix-blend-mode: screen; }
+  #cursor-ring { position: fixed; width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(59,130,246,0.5); pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: transform .12s ease-out, width .25s, height .25s; }
+  body:has(a:hover) #cursor, body:has(button:hover) #cursor { width: 18px; height: 18px; background: var(--purple); }
+  body:has(a:hover) #cursor-ring, body:has(button:hover) #cursor-ring { width: 50px; height: 50px; border-color: rgba(168,85,247,0.5); }
+
+  /* ─── LOADER ─── */
+  #loader { position: fixed; inset: 0; background: var(--navy); z-index: 10000; display: flex; align-items: center; justify-content: center; transition: opacity .5s .2s, visibility .5s .2s; }
+  #loader.hidden { opacity: 0; visibility: hidden; }
+  .loader-text { font-family: var(--serif); font-size: 2rem; letter-spacing: .2em; color: var(--blue); animation: pulse 1.2s ease-in-out infinite; }
+  .loader-bar { width: 200px; height: 2px; background: var(--navy3); margin-top: 1rem; border-radius: 2px; overflow: hidden; }
+  .loader-fill { height: 100%; background: linear-gradient(90deg,var(--blue),var(--purple)); animation: load 1.4s ease forwards; }
+  @keyframes load { from{width:0} to{width:100%} }
+  @keyframes pulse { 0%,100%{opacity:.4} 50%{opacity:1} }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--navy2); }
+  ::-webkit-scrollbar-thumb { background: linear-gradient(var(--blue),var(--purple)); border-radius: 3px; }
+
+  /* ─── TYPOGRAPHY ─── */
+  .serif { font-family: var(--serif); }
+  .mono { font-family: var(--mono); }
+
+  /* ─── GLOW EFFECTS ─── */
+  .glow-blue { box-shadow: 0 0 20px var(--blue-glow), 0 0 60px rgba(59,130,246,0.15); }
+  .glow-purple { box-shadow: 0 0 20px var(--purple-glow), 0 0 60px rgba(168,85,247,0.1); }
+  .glow-text-blue { text-shadow: 0 0 30px rgba(59,130,246,0.6), 0 0 80px rgba(59,130,246,0.3); }
+  .glow-text-purple { text-shadow: 0 0 30px rgba(168,85,247,0.6); }
+
+  /* ─── GLASS CARD ─── */
+  .glass { background: var(--glass); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--glass-border); }
+
+  /* ─── GRADIENT TEXT ─── */
+  .grad { background: linear-gradient(135deg, var(--cyan) 0%, var(--blue) 40%, var(--purple) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .grad2 { background: linear-gradient(90deg, var(--blue), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+  /* ─── SECTION FADE-IN ─── */
+  .reveal { opacity: 0; transform: translateY(40px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-left { opacity: 0; transform: translateX(-40px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal-left.visible { opacity: 1; transform: translateX(0); }
+  .reveal-right { opacity: 0; transform: translateX(40px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+  /* ─── STAGGER ─── */
+  .stagger-1 { transition-delay: .1s !important; }
+  .stagger-2 { transition-delay: .2s !important; }
+  .stagger-3 { transition-delay: .3s !important; }
+  .stagger-4 { transition-delay: .4s !important; }
+  .stagger-5 { transition-delay: .5s !important; }
+
+  /* ─── BUTTONS ─── */
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: .5rem;
+    padding: .8rem 2rem; border-radius: 6px; font-family: var(--sans); font-size: .9rem; font-weight: 500; letter-spacing: .03em;
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    color: #fff; border: none; cursor: pointer; position: relative; overflow: hidden;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .btn-primary::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,var(--purple),var(--cyan)); opacity:0; transition:opacity .3s; }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(59,130,246,.4), 0 0 0 1px rgba(168,85,247,.3); }
+  .btn-primary:hover::before { opacity: 1; }
+  .btn-primary span { position: relative; z-index: 1; }
+
+  .btn-ghost {
+    display: inline-flex; align-items: center; gap: .5rem;
+    padding: .8rem 2rem; border-radius: 6px; font-family: var(--sans); font-size: .9rem; font-weight: 500; letter-spacing: .03em;
+    background: transparent; color: var(--text); border: 1px solid var(--glass-border); cursor: pointer;
+    transition: border-color .2s, color .2s, background .2s, transform .2s;
+  }
+  .btn-ghost:hover { border-color: var(--blue); color: var(--blue); background: rgba(59,130,246,.06); transform: translateY(-2px); }
+
+  /* ─── NAV ─── */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; transition: background .3s, backdrop-filter .3s, border-color .3s; }
+  nav.scrolled { background: rgba(2,8,24,.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border); }
+  .nav-link { font-size: .85rem; letter-spacing: .08em; color: var(--muted); transition: color .2s; position: relative; text-decoration: none; text-transform: uppercase; }
+  .nav-link::after { content:''; position:absolute; bottom:-4px; left:0; width:0; height:1px; background: var(--blue); transition: width .3s; }
+  .nav-link:hover { color: var(--text); }
+  .nav-link:hover::after { width: 100%; }
+
+  /* ─── HERO ─── */
+  #hero { position: relative; min-height: 100vh; display: flex; align-items: center; overflow: hidden; }
+  .hero-bg { position: absolute; inset: 0; overflow: hidden; }
+  .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: .35; animation: float 8s ease-in-out infinite; }
+  .orb1 { width: 600px; height: 600px; background: radial-gradient(circle,rgba(59,130,246,.6),transparent 70%); top: -150px; right: -100px; animation-delay: 0s; }
+  .orb2 { width: 500px; height: 500px; background: radial-gradient(circle,rgba(168,85,247,.5),transparent 70%); bottom: -100px; left: -100px; animation-delay: -3s; }
+  .orb3 { width: 300px; height: 300px; background: radial-gradient(circle,rgba(34,211,238,.4),transparent 70%); top: 50%; left: 40%; animation-delay: -5s; }
+  @keyframes float { 0%,100%{transform:translateY(0) scale(1)} 50%{transform:translateY(-30px) scale(1.05)} }
+
+  .grid-overlay { position: absolute; inset: 0; background-image: linear-gradient(rgba(59,130,246,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,.04) 1px, transparent 1px); background-size: 60px 60px; mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black, transparent); }
+
+  .badge { display: inline-flex; align-items: center; gap: .5rem; padding: .35rem .9rem; border-radius: 100px; background: rgba(34,211,238,.08); border: 1px solid rgba(34,211,238,.25); font-size: .75rem; font-family: var(--mono); color: var(--cyan); letter-spacing: .1em; }
+  .badge-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--cyan); animation: ping-dot 2s ease infinite; }
+  @keyframes ping-dot { 0%,100%{box-shadow:0 0 0 0 rgba(34,211,238,.6)} 50%{box-shadow:0 0 0 5px rgba(34,211,238,0)} }
+
+  .hero-title { font-family: var(--serif); font-size: clamp(2.8rem,6vw,5.5rem); line-height: 1.1; font-weight: 700; letter-spacing: -.02em; }
+  .hero-sub { font-size: clamp(.9rem,1.5vw,1.05rem); color: var(--muted); line-height: 1.8; max-width: 500px; }
+
+  .floating-card { position: absolute; border-radius: 12px; padding: .75rem 1rem; backdrop-filter: blur(16px); border: 1px solid var(--glass-border); background: rgba(6,13,36,.7); font-size: .75rem; font-family: var(--mono); animation: float-card 6s ease-in-out infinite; }
+  .floating-card.card1 { top: 20%; right: 8%; animation-delay: 0s; }
+  .floating-card.card2 { bottom: 28%; right: 12%; animation-delay: -2s; }
+  .floating-card.card3 { top: 60%; right: 5%; animation-delay: -4s; }
+  @keyframes float-card { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+
+  /* ─── MARQUEE ─── */
+  .marquee-wrap { overflow: hidden; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); background: rgba(6,13,36,.5); padding: .8rem 0; }
+  .marquee-track { display: flex; gap: 3rem; width: max-content; animation: marquee 20s linear infinite; }
+  .marquee-item { font-family: var(--mono); font-size: .78rem; color: var(--muted); letter-spacing: .12em; text-transform: uppercase; white-space: nowrap; display: flex; align-items: center; gap: .6rem; }
+  .marquee-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--blue); }
+  @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+  /* ─── SECTION TITLES ─── */
+  .section-label { font-family: var(--mono); font-size: .72rem; letter-spacing: .18em; color: var(--blue); text-transform: uppercase; display: inline-flex; align-items: center; gap: .6rem; }
+  .section-label::before { content:''; width: 24px; height: 1px; background: var(--blue); }
+  .section-title { font-family: var(--serif); font-size: clamp(2rem,4vw,3.2rem); font-weight: 700; line-height: 1.15; letter-spacing: -.02em; }
+
+  /* ─── ABOUT ─── */
+  .skill-chip { display: inline-flex; align-items: center; gap: .4rem; padding: .35rem .8rem; border-radius: 4px; background: rgba(59,130,246,.08); border: 1px solid rgba(59,130,246,.2); font-size: .78rem; color: var(--text); transition: background .2s, border-color .2s, transform .2s; }
+  .skill-chip:hover { background: rgba(59,130,246,.18); border-color: var(--blue); transform: translateY(-2px); }
+  .skill-chip svg { color: var(--blue); }
+
+  .stat-box { padding: 1.5rem; border-radius: 10px; text-align: center; }
+  .stat-num { font-family: var(--serif); font-size: 2.8rem; font-weight: 700; line-height: 1; }
+
+  /* ─── SERVICES ─── */
+  .service-card { padding: 2rem; border-radius: 14px; background: var(--glass); border: 1px solid var(--glass-border); transition: transform .3s, border-color .3s, box-shadow .3s; position: relative; overflow: hidden; }
+  .service-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(59,130,246,.05), rgba(168,85,247,.05)); opacity: 0; transition: opacity .3s; }
+  .service-card:hover { transform: translateY(-6px); border-color: rgba(59,130,246,.35); box-shadow: 0 20px 60px rgba(0,0,0,.4), 0 0 0 1px rgba(59,130,246,.15), inset 0 1px 0 rgba(255,255,255,.05); }
+  .service-card:hover::before { opacity: 1; }
+  .service-icon { width: 52px; height: 52px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; font-size: 1.5rem; }
+
+  /* ─── PROJECTS ─── */
+  .filter-btn { padding: .45rem 1.1rem; border-radius: 100px; font-size: .82rem; font-family: var(--sans); font-weight: 500; border: 1px solid var(--glass-border); background: transparent; color: var(--muted); cursor: pointer; transition: all .2s; }
+  .filter-btn.active, .filter-btn:hover { background: rgba(59,130,246,.15); border-color: rgba(59,130,246,.5); color: var(--blue); }
+
+  .project-card { border-radius: 14px; overflow: hidden; border: 1px solid var(--glass-border); background: var(--navy2); transition: transform .3s, box-shadow .3s, border-color .3s; position: relative; }
+  .project-card:hover { transform: translateY(-8px) scale(1.01); box-shadow: 0 30px 80px rgba(0,0,0,.5), 0 0 0 1px rgba(59,130,246,.2); border-color: rgba(59,130,246,.25); }
+  .project-overlay { position: absolute; inset: 0; background: rgba(2,8,24,.85); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity .3s; backdrop-filter: blur(4px); }
+  .project-card:hover .project-overlay { opacity: 1; }
+  .project-img { width: 100%; height: 220px; object-fit: cover; display: block; }
+  .project-img-placeholder { width: 100%; height: 220px; display: flex; align-items: center; justify-content: center; font-size: 3rem; }
+  .tag { display: inline-block; padding: .2rem .6rem; border-radius: 4px; font-family: var(--mono); font-size: .68rem; background: rgba(59,130,246,.1); border: 1px solid rgba(59,130,246,.2); color: var(--cyan); margin: .15rem; }
+
+  /* ─── LIGHTBOX ─── */
+  #lightbox { position: fixed; inset: 0; z-index: 5000; display: flex; align-items: center; justify-content: center; padding: 1rem; opacity: 0; visibility: hidden; transition: opacity .3s, visibility .3s; }
+  #lightbox.open { opacity: 1; visibility: visible; }
+  .lightbox-bg { position: absolute; inset: 0; background: rgba(2,8,24,.92); backdrop-filter: blur(12px); }
+  .lightbox-box { position: relative; z-index: 1; border-radius: 16px; overflow: hidden; border: 1px solid var(--glass-border); background: var(--navy2); max-width: 900px; width: 100%; max-height: 90vh; overflow-y: auto; }
+
+  /* ─── BEFORE/AFTER ─── */
+  .ba-container { position: relative; border-radius: 14px; overflow: hidden; border: 1px solid var(--glass-border); user-select: none; }
+  .ba-after, .ba-before { position: absolute; inset: 0; }
+  .ba-after { width: 100%; }
+  .ba-before { width: 50%; overflow: hidden; border-right: 2px solid var(--cyan); }
+  .ba-handle { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--cyan); cursor: ew-resize; left: 50%; }
+  .ba-handle-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 40px; height: 40px; border-radius: 50%; background: var(--cyan); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px var(--cyan-glow); }
+  .ba-label { position: absolute; top: 1rem; font-family: var(--mono); font-size: .72rem; letter-spacing: .1em; padding: .3rem .7rem; border-radius: 4px; text-transform: uppercase; }
+
+  /* ─── TESTIMONIALS ─── */
+  .testi-track { display: flex; gap: 1.5rem; transition: transform .4s ease; }
+  .testi-card { min-width: calc(33.333% - 1rem); border-radius: 14px; padding: 2rem; background: var(--glass); border: 1px solid var(--glass-border); flex-shrink: 0; transition: border-color .3s; }
+  .testi-card:hover { border-color: rgba(168,85,247,.4); }
+  .stars { color: #f59e0b; letter-spacing: 2px; font-size: .9rem; }
+  .avatar { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-size: 1.2rem; font-weight: 700; color: #fff; flex-shrink: 0; }
+
+  @media(max-width:900px) { .testi-card { min-width: calc(100% - 0px); } }
+  @media(max-width:640px) { .testi-card { min-width: calc(100% - 0px); } }
+
+  /* ─── PRICING ─── */
+  .pricing-card { border-radius: 16px; padding: 2.5rem; border: 1px solid var(--glass-border); background: var(--glass); position: relative; transition: transform .3s, border-color .3s, box-shadow .3s; }
+  .pricing-card:hover { transform: translateY(-6px); }
+  .pricing-card.featured { border-color: rgba(59,130,246,.5); background: linear-gradient(135deg, rgba(59,130,246,.08), rgba(168,85,247,.06)); box-shadow: 0 0 40px rgba(59,130,246,.15); }
+  .pricing-card.featured:hover { box-shadow: 0 20px 60px rgba(59,130,246,.25); }
+  .popular-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: linear-gradient(90deg, var(--blue), var(--purple)); padding: .3rem 1.2rem; border-radius: 100px; font-size: .72rem; font-weight: 600; letter-spacing: .08em; white-space: nowrap; }
+  .check-item { display: flex; align-items: flex-start; gap: .75rem; font-size: .9rem; color: var(--muted); padding: .4rem 0; }
+  .check-item svg { color: var(--blue); flex-shrink: 0; margin-top: 2px; }
+
+  /* ─── CONTACT ─── */
+  .form-group { display: flex; flex-direction: column; gap: .5rem; }
+  .form-label { font-size: .78rem; letter-spacing: .08em; color: var(--muted); text-transform: uppercase; font-family: var(--mono); }
+  .form-input { background: rgba(255,255,255,.04); border: 1px solid var(--glass-border); border-radius: 8px; padding: .85rem 1rem; font-size: .9rem; font-family: var(--sans); color: var(--text); outline: none; transition: border-color .2s, box-shadow .2s; }
+  .form-input:focus { border-color: rgba(59,130,246,.5); box-shadow: 0 0 0 3px rgba(59,130,246,.1); }
+  .form-input::placeholder { color: rgba(148,163,184,.4); }
+  select.form-input option { background: var(--navy2); }
+
+  /* ─── FOOTER ─── */
+  .social-link { width: 40px; height: 40px; border-radius: 8px; border: 1px solid var(--glass-border); display: inline-flex; align-items: center; justify-content: center; color: var(--muted); transition: border-color .2s, color .2s, background .2s, transform .2s; }
+  .social-link:hover { border-color: var(--blue); color: var(--blue); background: rgba(59,130,246,.08); transform: translateY(-3px); }
+
+  /* ─── BACK TO TOP ─── */
+  #btt { position: fixed; bottom: 2rem; right: 2rem; z-index: 999; width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(135deg, var(--blue), var(--purple)); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #fff; opacity: 0; visibility: hidden; transform: translateY(10px); transition: opacity .3s, visibility .3s, transform .3s; box-shadow: 0 4px 20px rgba(59,130,246,.4); }
+  #btt.show { opacity: 1; visibility: visible; transform: translateY(0); }
+  #btt:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(59,130,246,.5); }
+
+  /* ─── MOBILE NAV ─── */
+  #mobile-menu { position: fixed; inset: 0; z-index: 999; background: rgba(2,8,24,.97); backdrop-filter: blur(20px); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem; opacity: 0; visibility: hidden; transition: opacity .3s, visibility .3s; }
+  #mobile-menu.open { opacity: 1; visibility: visible; }
+  .mobile-nav-link { font-family: var(--serif); font-size: 2rem; font-weight: 600; color: var(--muted); text-decoration: none; transition: color .2s; }
+  .mobile-nav-link:hover { color: var(--text); }
+
+  /* ─── DIVIDER ─── */
+  .grad-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(59,130,246,.3), rgba(168,85,247,.3), transparent); }
+
+  /* ─── NOISE OVERLAY ─── */
+  body::after { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9997; opacity: .025; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); background-size: 200px; }
+
+  /* ─── MISC ─── */
+  .line-accent { width: 60px; height: 3px; border-radius: 2px; background: linear-gradient(90deg, var(--blue), var(--purple)); }
+  section { position: relative; }
+
+  @media(max-width:768px) {
+    .floating-card { display: none; }
+    .hero-title { font-size: 2.6rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- LOADER -->
+<div id="loader">
+  <div style="text-align:center">
+    <div class="loader-text serif">HP</div>
+    <div style="font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;color:var(--muted);margin-top:.5rem">LOADING</div>
+    <div class="loader-bar"><div class="loader-fill"></div></div>
+  </div>
+</div>
+
+<!-- FLOATING HIRE ME BUTTON -->
+<a href="#contact" id="hire-me-btn" aria-label="Hire Me" style="
+  position:fixed;
+  bottom:2rem;
+  right:5.5rem;
+  z-index:998;
+  width:64px;
+  height:64px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-decoration:none;
+  box-shadow:0 0 0 0 rgba(59,130,246,0.5), 0 8px 30px rgba(59,130,246,0.4);
+  animation:hire-pulse 2.5s ease-in-out infinite;
+  transition:transform .25s, box-shadow .25s;
+  overflow:hidden;
+">
+  <!-- Rotating text ring -->
+  <svg viewBox="0 0 64 64" width="64" height="64" style="position:absolute;inset:0;animation:spin-ring 10s linear infinite;">
+    <defs>
+      <path id="circle-path" d="M 32,32 m -22,0 a 22,22 0 1,1 44,0 a 22,22 0 1,1 -44,0"/>
+    </defs>
+    <text font-family="'JetBrains Mono',monospace" font-size="6.2" fill="rgba(255,255,255,0.75)" letter-spacing="2.8">
+      <textPath href="#circle-path">HIRE ME • HIRE ME • HIRE ME •</textPath>
+    </text>
+  </svg>
+  <!-- Center icon -->
+  <svg width="22" height="22" fill="none" stroke="#fff" stroke-width="2.2" viewBox="0 0 24 24" style="position:relative;z-index:1;flex-shrink:0;">
+    <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.06 1.22 2 2 0 012.06 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92z"/>
+  </svg>
+</a>
+
+<style>
+  @keyframes hire-pulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(59,130,246,0.5), 0 8px 30px rgba(59,130,246,0.4); }
+    50%      { box-shadow: 0 0 0 10px rgba(59,130,246,0), 0 8px 30px rgba(168,85,247,0.5); }
+  }
+  @keyframes spin-ring { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+  #hire-me-btn:hover { transform:scale(1.12) translateY(-3px); box-shadow:0 0 0 0 transparent, 0 16px 40px rgba(168,85,247,0.6); }
+</style>
+
+<!-- BACK TO TOP -->
+<button id="btt" aria-label="Back to top">
+  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 15l-6-6-6 6"/></svg>
+</button>
+
+<!-- MOBILE MENU -->
+<div id="mobile-menu" role="dialog" aria-modal="true" aria-label="Navigation">
+  <button id="close-menu" style="position:absolute;top:1.5rem;right:1.5rem;background:none;border:none;color:var(--muted);cursor:pointer;" aria-label="Close menu">
+    <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+  </button>
+  <a href="#about" class="mobile-nav-link">About</a>
+  <a href="#services" class="mobile-nav-link">Services</a>
+  <a href="#projects" class="mobile-nav-link">Projects</a>
+  <a href="#pricing" class="mobile-nav-link">Pricing</a>
+  <a href="#contact" class="mobile-nav-link">Contact</a>
+</div>
+
+<!-- NAVIGATION -->
+<nav id="navbar">
+  <div style="max-width:1280px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:70px;">
+    <a href="#hero" style="text-decoration:none;display:flex;align-items:center;gap:.6rem;">
+      <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:1.1rem;font-weight:700;color:#fff;">H</div>
+      <span style="font-family:var(--serif);font-size:1.05rem;font-weight:600;color:var(--text);">Harichandan</span>
+    </a>
+    <div class="hidden md:flex items-center gap-8" style="display:flex;gap:2.5rem;align-items:center;">
+      <a href="#about" class="nav-link">About</a>
+      <a href="#services" class="nav-link">Services</a>
+      <a href="#projects" class="nav-link">Projects</a>
+      <a href="#pricing" class="nav-link">Pricing</a>
+      <a href="#contact" class="nav-link">Contact</a>
+    </div>
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <button id="hamburger" aria-label="Open menu" style="background:none;border:1px solid var(--glass-border);border-radius:8px;padding:.5rem;cursor:pointer;color:var(--text);">
+        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════ HERO ═══════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-bg">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <!-- Floating code cards -->
+  <div class="floating-card card1" style="color:var(--cyan);">
+    <div style="color:var(--muted);font-size:.68rem;margin-bottom:.3rem">// project_status.js</div>
+    <div><span style="color:var(--purple)">const</span> <span style="color:var(--blue)">conversion</span> = <span style="color:#f59e0b">"↑ 340%"</span></div>
+  </div>
+  <div class="floating-card card2" style="color:var(--text);">
+    <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem;">
+      <div style="width:8px;height:8px;border-radius:50%;background:#22c55e;animation:ping-dot 2s infinite"></div>
+      <span style="color:var(--muted);font-size:.68rem">Client Review</span>
+    </div>
+    <div style="font-size:.82rem">⭐⭐⭐⭐⭐ Delivered in 24h</div>
+  </div>
+  <div class="floating-card card3" style="color:var(--purple);">
+    <div style="font-size:.68rem;color:var(--muted);margin-bottom:.3rem">// performance.score</div>
+    <div style="font-size:1.2rem;font-weight:700;color:var(--cyan)">99 <span style="font-size:.7rem;color:var(--muted)">/ 100</span></div>
+    <div style="font-size:.68rem;color:var(--muted)">PageSpeed Insights</div>
+  </div>
+
+  <div style="max-width:1280px;margin:0 auto;padding:0 2rem;padding-top:100px;padding-bottom:80px;position:relative;z-index:1;">
+    <div style="max-width:720px;">
+      <div class="badge" style="margin-bottom:1.5rem;">
+        <div class="badge-dot"></div>
+        Available for new projects — Get your site in 48–76 hrs
+      </div>
+      
+      <h1 class="hero-title" style="margin-bottom:1.5rem;">
+        I Build Websites That Turn<br>
+        <span class="grad glow-text-blue">Visitors Into Clients</span>
+      </h1>
+      
+      <p class="hero-sub" style="margin-bottom:2.5rem;">
+        Business Websites &bull; Personal Portfolios &bull; Landing Pages<br>
+        <span style="color:rgba(148,163,184,.6);font-size:.9rem;">Crafted for conversion. Engineered for speed. Designed to grow your brand.</span>
+      </p>
+      
+      <div style="display:flex;flex-wrap:wrap;gap:1rem;align-items:center;">
+        <a href="#projects" class="btn-primary"><span>✦ View My Work</span></a>
+        <a href="#contact" class="btn-ghost">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.06 1.22 2 2 0 012.06 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92z"/></svg>
+          Start a Project
+        </a>
+      </div>
+
+      <div style="display:flex;gap:3rem;margin-top:3.5rem;flex-wrap:wrap;">
+        <div>
+          <div class="serif" style="font-size:2.2rem;font-weight:700;" class="grad2">50+</div>
+          <div style="font-size:.8rem;color:var(--muted);margin-top:.2rem">Projects Delivered</div>
+        </div>
+        <div style="width:1px;background:var(--glass-border)"></div>
+        <div>
+          <div class="serif" style="font-size:2.2rem;font-weight:700;color:var(--purple)">98%</div>
+          <div style="font-size:.8rem;color:var(--muted);margin-top:.2rem">Client Satisfaction</div>
+        </div>
+        <div style="width:1px;background:var(--glass-border)"></div>
+        <div>
+          <div class="serif" style="font-size:2.2rem;font-weight:700;color:var(--cyan)">24h</div>
+          <div style="font-size:.8rem;color:var(--muted);margin-top:.2rem">Fast Turnaround</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track" id="marqueeTrack">
+    <div class="marquee-item"><div class="marquee-dot"></div>Web Design</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Frontend Development</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>UI/UX Design</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Responsive Layouts</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Landing Pages</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Business Websites</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Portfolio Sites</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Performance Optimization</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>SEO-Friendly Code</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>HTML &bull; CSS &bull; JS</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Web Design</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Frontend Development</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>UI/UX Design</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Responsive Layouts</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Landing Pages</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Business Websites</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Portfolio Sites</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Performance Optimization</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>SEO-Friendly Code</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>HTML &bull; CSS &bull; JS</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ ABOUT ══════════════════════════════════ -->
+<section id="about" style="padding:8rem 0;">
+  <div style="max-width:1280px;margin:0 auto;padding:0 2rem;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;" class="about-grid">
+      
+      <!-- Left: Avatar & stats -->
+      <div class="reveal-left">
+        <div style="position:relative;max-width:400px;">
+          <div style="border-radius:20px;overflow:hidden;border:1px solid var(--glass-border);position:relative;background:linear-gradient(135deg,var(--navy2),var(--navy3));">
+            <div style="width:100%;height:420px;display:flex;align-items:center;justify-content:center;font-size:8rem;flex-direction:column;gap:1rem;">
+              <div style="width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:2.5rem;font-weight:700;color:#fff;box-shadow:0 0 40px var(--blue-glow)">H</div>
+              <div style="font-family:var(--serif);font-size:1.6rem;font-weight:600;color:var(--text)">Harichandan</div>
+              <div style="font-family:var(--mono);font-size:.78rem;color:var(--blue);letter-spacing:.1em">WEB DEVELOPER</div>
+            </div>
+            <div style="position:absolute;bottom:0;left:0;right:0;height:120px;background:linear-gradient(to top,var(--navy2),transparent)"></div>
+          </div>
+          <!-- Stat badges -->
+          <div class="glass" style="position:absolute;bottom:-20px;right:-20px;padding:1rem 1.5rem;border-radius:12px;">
+            <div style="font-family:var(--serif);font-size:2rem;font-weight:700;" class="grad2">50+</div>
+            <div style="font-size:.78rem;color:var(--muted)">Happy Clients</div>
+          </div>
+          <div class="glass" style="position:absolute;top:-15px;left:-15px;padding:.8rem 1.2rem;border-radius:10px;">
+            <div style="font-family:var(--mono);font-size:.72rem;color:var(--cyan)">✓ Available Now</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Content -->
+      <div class="reveal-right">
+        <div class="section-label" style="margin-bottom:1rem;">About Me</div>
+        <h2 class="section-title" style="margin-bottom:1.5rem;">
+          I Don't Just Build Websites—<br><span class="grad">I Build Growth Engines</span>
+        </h2>
+        <div class="line-accent" style="margin-bottom:1.5rem;"></div>
+        <p style="color:var(--muted);line-height:1.9;margin-bottom:1rem;font-size:.95rem;">
+          Hey, I'm <strong style="color:var(--text);font-weight:500;">Harichandan Prusty</strong> — a freelance web developer with 4+ years of experience passionate about crafting digital experiences that actually move the needle for businesses.
+        </p>
+        <p style="color:var(--muted);line-height:1.9;margin-bottom:2rem;font-size:.95rem;">
+          I specialize in designing and building high-performance websites for <strong style="color:var(--text);font-weight:500;">businesses, personal brands, and portfolios</strong>. Every pixel is intentional. Every interaction is crafted to convert visitors into paying clients.
+        </p>
+        
+        <div style="display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:2.5rem;">
+          <div class="skill-chip">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            Web Design
+          </div>
+          <div class="skill-chip">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+            Frontend Dev
+          </div>
+          <div class="skill-chip">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+            UI/UX Design
+          </div>
+          <div class="skill-chip">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/></svg>
+            Responsive Design
+          </div>
+          <div class="skill-chip">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            Performance Opt.
+          </div>
+          <div class="skill-chip">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            SEO Basics
+          </div>
+        </div>
+
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+          <a href="#contact" class="btn-primary"><span>Work With Me</span></a>
+          <a href="#projects" class="btn-ghost">See My Work</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="grad-divider" style="max-width:1280px;margin:0 auto;"></div>
+
+<!-- ═══════════════════════════════════ SERVICES ══════════════════════════════ -->
+<section id="services" style="padding:8rem 0;">
+  <div style="max-width:1280px;margin:0 auto;padding:0 2rem;">
+    <div style="text-align:center;margin-bottom:4rem;" class="reveal">
+      <div class="section-label" style="justify-content:center;margin-bottom:1rem;">What I Offer</div>
+      <h2 class="section-title">Solutions, Not Just Services</h2>
+      <p style="color:var(--muted);margin-top:1rem;max-width:500px;margin-left:auto;margin-right:auto;font-size:.95rem;line-height:1.7">Every website I build is engineered around one goal: helping your business grow online.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;">
+      <div class="service-card reveal stagger-1">
+        <div class="service-icon" style="background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.2);">🏢</div>
+        <div style="font-family:var(--mono);font-size:.68rem;color:var(--blue);letter-spacing:.12em;margin-bottom:.5rem;">01 / SERVICE</div>
+        <h3 class="serif" style="font-size:1.5rem;font-weight:600;margin-bottom:.75rem;">Business Websites</h3>
+        <p style="color:var(--muted);font-size:.9rem;line-height:1.75;margin-bottom:1.5rem;">Convert visitors into paying customers. A professionally designed site that builds trust, communicates your value, and drives real inquiries.</p>
+        <div style="padding:.6rem 1rem;background:rgba(59,130,246,.06);border-radius:6px;border-left:2px solid var(--blue);">
+          <p style="font-size:.8rem;color:var(--blue);">✓ Built for lead generation & conversions</p>
+        </div>
+      </div>
+
+      <div class="service-card reveal stagger-2" style="border-color:rgba(168,85,247,.2);">
+        <div class="service-icon" style="background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.2);">🎨</div>
+        <div style="font-family:var(--mono);font-size:.68rem;color:var(--purple);letter-spacing:.12em;margin-bottom:.5rem;">02 / SERVICE</div>
+        <h3 class="serif" style="font-size:1.5rem;font-weight:600;margin-bottom:.75rem;">Personal Portfolios</h3>
+        <p style="color:var(--muted);font-size:.9rem;line-height:1.75;margin-bottom:1.5rem;">Showcase your skills and work in a way that commands attention and opens doors. Make recruiters and clients remember you.</p>
+        <div style="padding:.6rem 1rem;background:rgba(168,85,247,.06);border-radius:6px;border-left:2px solid var(--purple);">
+          <p style="font-size:.8rem;color:var(--purple);">✓ Crafted to win opportunities</p>
+        </div>
+      </div>
+
+      <div class="service-card reveal stagger-3" style="border-color:rgba(34,211,238,.2);">
+        <div class="service-icon" style="background:rgba(34,211,238,.12);border:1px solid rgba(34,211,238,.2);">⚡</div>
+        <div style="font-family:var(--mono);font-size:.68rem;color:var(--cyan);letter-spacing:.12em;margin-bottom:.5rem;">03 / SERVICE</div>
+        <h3 class="serif" style="font-size:1.5rem;font-weight:600;margin-bottom:.75rem;">Landing Pages</h3>
+        <p style="color:var(--muted);font-size:.9rem;line-height:1.75;margin-bottom:1.5rem;">Designed for high conversions. Fast-loading, attention-grabbing pages that turn ad traffic into leads, subscribers, and sales.</p>
+        <div style="padding:.6rem 1rem;background:rgba(34,211,238,.06);border-radius:6px;border-left:2px solid var(--cyan);">
+          <p style="font-size:.8rem;color:var(--cyan);">✓ CRO-focused design principles</p>
+        </div>
+      </div>
+
+      <div class="service-card reveal stagger-4">
+        <div class="service-icon" style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2);">🔧</div>
+        <div style="font-family:var(--mono);font-size:.68rem;color:#f59e0b;letter-spacing:.12em;margin-bottom:.5rem;">04 / SERVICE</div>
+        <h3 class="serif" style="font-size:1.5rem;font-weight:600;margin-bottom:.75rem;">Website Revamps</h3>
+        <p style="color:var(--muted);font-size:.9rem;line-height:1.75;margin-bottom:1.5rem;">Got an outdated site? I'll redesign it from the ground up — better performance, modern aesthetics, and a UX that actually works.</p>
+        <div style="padding:.6rem 1rem;background:rgba(245,158,11,.06);border-radius:6px;border-left:2px solid #f59e0b;">
+          <p style="font-size:.8rem;color:#f59e0b;">✓ From dull to remarkable</p>
+        </div>
+      </div>
+
+      <div class="service-card reveal stagger-5" style="grid-column:span 1;border-color:rgba(34,197,94,.2);">
+        <div class="service-icon" style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);">📱</div>
+        <div style="font-family:var(--mono);font-size:.68rem;color:#22c55e;letter-spacing:.12em;margin-bottom:.5rem;">05 / SERVICE</div>
+        <h3 class="serif" style="font-size:1.5rem;font-weight:600;margin-bottom:.75rem;">Mobile-First Design</h3>
+        <p style="color:var(--muted);font-size:.9rem;line-height:1.75;margin-bottom:1.5rem;">Over 60% of web traffic is mobile. Every site I build looks stunning and works flawlessly across all devices and screen sizes.</p>
+        <div style="padding:.6rem 1rem;background:rgba(34,197,94,.05);border-radius:6px;border-left:2px solid #22c55e;">
+          <p style="font-size:.8rem;color:#22c55e;">✓ Pixel-perfect on every screen</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="grad-divider" style="max-width:1280px;margin:0 auto;"></div>
+
+<!-- ═══════════════════════════════════ PROJECTS ═══════════════════════════════ -->
+<section id="projects" style="padding:8rem 0;">
+  <div style="max-width:1280px;margin:0 auto;padding:0 2rem;">
+    <div style="text-align:center;margin-bottom:3rem;" class="reveal">
+      <div class="section-label" style="justify-content:center;margin-bottom:1rem;">My Work</div>
+      <h2 class="section-title">Projects That Drive Results</h2>
+      <p style="color:var(--muted);margin-top:1rem;font-size:.95rem;">A showcase of real projects — each built with purpose and precision.</p>
+    </div>
+
+    <!-- Filter -->
+    <div style="display:flex;justify-content:center;gap:.75rem;flex-wrap:wrap;margin-bottom:3rem;" class="reveal">
+      <button class="filter-btn active" data-filter="all">All Projects</button>
+      <button class="filter-btn" data-filter="business">Business</button>
+      <button class="filter-btn" data-filter="portfolio">Portfolio</button>
+      <button class="filter-btn" data-filter="landing">Landing Pages</button>
+    </div>
+
+    <!-- Projects Grid -->
+    <div id="projects-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.5rem;">
+
+      <div class="project-card reveal stagger-1" data-category="business" data-id="0" style="cursor:pointer;">
+        <div class="project-img-placeholder" style="background:linear-gradient(135deg,#0f2040,#1e3a6e);">
+          <div style="text-align:center">
+            <div style="font-size:3.5rem;margin-bottom:.5rem;">🏪</div>
+            <div style="font-family:var(--mono);font-size:.72rem;color:var(--blue);letter-spacing:.1em">BUSINESS SITE</div>
+          </div>
+        </div>
+        <div class="project-overlay">
+          <button class="btn-primary" onclick="openLightbox(0)"><span>View Project →</span></button>
+        </div>
+        <div style="padding:1.5rem;">
+          <h3 style="font-family:var(--serif);font-size:1.3rem;font-weight:600;margin-bottom:.5rem;">RetailPro Store</h3>
+          <p style="color:var(--muted);font-size:.85rem;margin-bottom:1rem;">A full-featured retail business site with product showcase, testimonials, and contact system.</p>
+          <div><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span><span class="tag">Tailwind</span></div>
+        </div>
+      </div>
+
+      <div class="project-card reveal stagger-2" data-category="portfolio" data-id="1" style="cursor:pointer;">
+        <div class="project-img-placeholder" style="background:linear-gradient(135deg,#1a0533,#3d0d6b);">
+          <div style="text-align:center">
+            <div style="font-size:3.5rem;margin-bottom:.5rem;">👩‍💻</div>
+            <div style="font-family:var(--mono);font-size:.72rem;color:var(--purple);letter-spacing:.1em">PORTFOLIO</div>
+          </div>
+        </div>
+        <div class="project-overlay">
+          <button class="btn-primary" onclick="openLightbox(1)"><span>View Project →</span></button>
+        </div>
+        <div style="padding:1.5rem;">
+          <h3 style="font-family:var(--serif);font-size:1.3rem;font-weight:600;margin-bottom:.5rem;">Designer Portfolio</h3>
+          <p style="color:var(--muted);font-size:.85rem;margin-bottom:1rem;">A stunning dark-themed portfolio for a UI designer showcasing their creative work and skills.</p>
+          <div><span class="tag">HTML</span><span class="tag">GSAP</span><span class="tag">CSS3</span></div>
+        </div>
+      </div>
+
+      <div class="project-card reveal stagger-3" data-category="landing" data-id="2" style="cursor:pointer;">
+        <div class="project-img-placeholder" style="background:linear-gradient(135deg,#001a1a,#003d3d);">
+          <div style="text-align:center">
+            <div style="font-size:3.5rem;margin-bottom:.5rem;">🚀</div>
+            <div style="font-family:var(--mono);font-size:.72rem;color:var(--cyan);letter-spacing:.1em">LANDING PAGE</div>
+          </div>
+        </div>
+        <div class="project-overlay">
+          <button class="btn-primary" onclick="openLightbox(2)"><span>View Project →</span></button>
+        </div>
+        <div style="padding:1.5rem;">
+          <h3 style="font-family:var(--serif);font-size:1.3rem;font-weight:600;margin-bottom:.5rem;">SaaS Product Launch</h3>
+          <p style="color:var(--muted);font-size:.85rem;margin-bottom:1rem;">A high-converting landing page for a SaaS product with a 38% signup conversion rate.</p>
+          <div><span class="tag">HTML</span><span class="tag">Tailwind</span><span class="tag">JS</span><span class="tag">Animations</span></div>
+        </div>
+      </div>
+
+      <div class="project-card reveal stagger-4" data-category="business" data-id="3" style="cursor:pointer;">
+        <div class="project-img-placeholder" style="background:linear-gradient(135deg,#1a1000,#3d2800);">
+          <div style="text-align:center">
+            <div style="font-size:3.5rem;margin-bottom:.5rem;">🍽️</div>
+            <div style="font-family:var(--mono);font-size:.72rem;color:#f59e0b;letter-spacing:.1em">RESTAURANT</div>
+          </div>
+        </div>
+        <div class="project-overlay">
+          <button class="btn-primary" onclick="openLightbox(3)"><span>View Project →</span></button>
+        </div>
+        <div style="padding:1.5rem;">
+          <h3 style="font-family:var(--serif);font-size:1.3rem;font-weight:600;margin-bottom:.5rem;">Spice Garden Restaurant</h3>
+          <p style="color:var(--muted);font-size:.85rem;margin-bottom:1rem;">A rich, warm restaurant website with menu, gallery, and table booking functionality.</p>
+          <div><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span></div>
+        </div>
+      </div>
+
+      <div class="project-card reveal stagger-5" data-category="portfolio" data-id="4" style="cursor:pointer;">
+        <div class="project-img-placeholder" style="background:linear-gradient(135deg,#001422,#00274a);">
+          <div style="text-align:center">
+            <div style="font-size:3.5rem;margin-bottom:.5rem;">📸</div>
+            <div style="font-family:var(--mono);font-size:.72rem;color:var(--blue);letter-spacing:.1em">PHOTOGRAPHER</div>
+          </div>
+        </div>
+        <div class="project-overlay">
+          <button class="btn-primary" onclick="openLightbox(4)"><span>View Project →</span></button>
+        </div>
+        <div style="padding:1.5rem;">
+          <h3 style="font-family:var(--serif);font-size:1.3rem;font-weight:600;margin-bottom:.5rem;">Lens & Light Portfolio</h3>
+          <p style="color:var(--muted);font-size:.85rem;margin-bottom:1rem;">A fullscreen photography portfolio with a masonry gallery and smooth parallax scrolling.</p>
+          <div><span class="tag">HTML</span><span class="tag">CSS Grid</span><span class="tag">Parallax</span></div>
+        </div>
+      </div>
+
+      <div class="project-card reveal stagger-1" data-category="landing" data-id="5" style="cursor:pointer;">
+        <div class="project-img-placeholder" style="background:linear-gradient(135deg,#0d001a,#220040);">
+          <div style="text-align:center">
+            <div style="font-size:3.5rem;margin-bottom:.5rem;">🎯</div>
+            <div style="font-family:var(--mono);font-size:.72rem;color:var(--purple);letter-spacing:.1em">LEAD GEN</div>
+          </div>
+        </div>
+        <div class="project-overlay">
+          <button class="btn-primary" onclick="openLightbox(5)"><span>View Project →</span></button>
+        </div>
+        <div style="padding:1.5rem;">
+          <h3 style="font-family:var(--serif);font-size:1.3rem;font-weight:600;margin-bottom:.5rem;">FitCoach Lead Page</h3>
+          <p style="color:var(--muted);font-size:.85rem;margin-bottom:1rem;">A bold fitness coaching landing page with lead capture form — generated 200+ leads in week 1.</p>
+          <div><span class="tag">HTML</span><span class="tag">Tailwind</span><span class="tag">Forms</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Privacy Note -->
+    <div class="reveal" style="text-align:center;margin-top:2.5rem;">
+      <div style="display:inline-flex;align-items:center;gap:.6rem;padding:.65rem 1.5rem;border-radius:100px;background:rgba(148,163,184,.05);border:1px solid rgba(148,163,184,.12);">
+        <svg width="14" height="14" fill="none" stroke="var(--muted)" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        <span style="font-family:var(--mono);font-size:.73rem;color:var(--muted);letter-spacing:.05em;">Due to privacy policies, we don't share the live links of websites we've built.</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ LIGHTBOX ══════════════════════════════ -->
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="Project Details">
+  <div class="lightbox-bg" onclick="closeLightbox()"></div>
+  <div class="lightbox-box">
+    <div id="lightbox-content" style="padding:2.5rem;"></div>
+  </div>
+</div>
+
+<div class="grad-divider" style="max-width:1280px;margin:0 auto;"></div>
+
+<!-- ═══════════════════════════════════ BEFORE/AFTER ══════════════════════════ -->
+<section id="transformation" style="padding:8rem 0;">
+  <div style="max-width:1280px;margin:0 auto;padding:0 2rem;">
+    <div style="text-align:center;margin-bottom:4rem;" class="reveal">
+      <div class="section-label" style="justify-content:center;margin-bottom:1rem;">The Transformation</div>
+      <h2 class="section-title">See the Difference</h2>
+      <p style="color:var(--muted);margin-top:1rem;font-size:.95rem;max-width:520px;margin-left:auto;margin-right:auto;">Drag the slider to reveal the power of professional web design. Same business — completely different impression.</p>
+    </div>
+
+    <div class="reveal" style="max-width:800px;margin:0 auto;">
+      <div class="ba-container" id="ba-container" style="height:460px;border-radius:16px;overflow:hidden;position:relative;cursor:ew-resize;">
+        <!-- AFTER (new design) -->
+        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#020818 0%,#060d24 100%);display:flex;align-items:center;justify-content:center;">
+          <div style="width:100%;padding:2rem;">
+            <div style="border-radius:12px;overflow:hidden;background:rgba(6,13,36,.8);border:1px solid rgba(59,130,246,.25);padding:2rem;text-align:center;">
+              <div style="width:60px;height:60px;border-radius:12px;background:linear-gradient(135deg,var(--blue),var(--purple));display:inline-flex;align-items:center;justify-content:center;margin-bottom:1rem;font-size:1.5rem;">🏢</div>
+              <h3 style="font-family:var(--serif);font-size:1.8rem;font-weight:700;color:var(--text);margin-bottom:.5rem;">Premium Business Co.</h3>
+              <p style="color:var(--muted);font-size:.9rem;margin-bottom:1.5rem;">We help businesses grow with premium digital solutions</p>
+              <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+                <div style="padding:.7rem 1.5rem;background:linear-gradient(135deg,var(--blue),var(--purple));border-radius:6px;font-size:.85rem;color:#fff;">Get Started →</div>
+                <div style="padding:.7rem 1.5rem;border:1px solid rgba(59,130,246,.3);border-radius:6px;font-size:.85rem;color:var(--text);">Learn More</div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-top:2rem;">
+                <div style="background:rgba(59,130,246,.08);border-radius:8px;padding:1rem;border:1px solid rgba(59,130,246,.15);">
+                  <div style="font-family:var(--serif);font-size:1.5rem;font-weight:700;color:var(--blue)">200+</div>
+                  <div style="font-size:.75rem;color:var(--muted)">Clients</div>
+                </div>
+                <div style="background:rgba(168,85,247,.08);border-radius:8px;padding:1rem;border:1px solid rgba(168,85,247,.15);">
+                  <div style="font-family:var(--serif);font-size:1.5rem;font-weight:700;color:var(--purple)">99%</div>
+                  <div style="font-size:.75rem;color:var(--muted)">Satisfaction</div>
+                </div>
+                <div style="background:rgba(34,211,238,.08);border-radius:8px;padding:1rem;border:1px solid rgba(34,211,238,.15);">
+                  <div style="font-family:var(--serif);font-size:1.5rem;font-weight:700;color:var(--cyan)">5★</div>
+                  <div style="font-size:.75rem;color:var(--muted)">Rating</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- BEFORE (old design) — overlaid, clipped by handle -->
+        <div id="ba-before" style="position:absolute;top:0;left:0;bottom:0;width:50%;overflow:hidden;border-right:2px solid var(--cyan);">
+          <div style="width:800px;height:460px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;">
+            <div style="padding:2rem;text-align:center;width:100%;">
+              <div style="background:#ccc;border-radius:4px;width:60px;height:60px;margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;color:#666;font-size:1.5rem;">🏢</div>
+              <h3 style="font-family:Arial,sans-serif;font-size:1.4rem;font-weight:700;color:#333;margin-bottom:.5rem;">Business Co.</h3>
+              <p style="color:#666;font-size:.85rem;margin-bottom:1.5rem;font-family:Arial,sans-serif;">We offer business services.</p>
+              <div style="padding:.5rem 1rem;background:#0066cc;border-radius:3px;font-size:.85rem;color:#fff;display:inline-block;font-family:Arial;">Contact Us</div>
+              <div style="background:#e5e5e5;border-radius:4px;padding:1rem;margin-top:1.5rem;">
+                <p style="font-family:Arial,sans-serif;font-size:.8rem;color:#555;">Welcome to our company. We have been in business since 2010. Please call us for inquiries.</p>
+              </div>
+              <div style="margin-top:1rem;font-family:Arial,sans-serif;font-size:.7rem;color:#999;">© 2015 Business Co. All rights reserved.</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Handle -->
+        <div id="ba-handle" style="position:absolute;top:0;bottom:0;left:50%;width:2px;background:var(--cyan);cursor:ew-resize;box-shadow:0 0 15px var(--cyan-glow);">
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;border-radius:50%;background:var(--navy);border:2px solid var(--cyan);display:flex;align-items:center;justify-content:center;color:var(--cyan);box-shadow:0 0 20px var(--cyan-glow);font-size:.9rem;">⟺</div>
+        </div>
+        
+        <!-- Labels -->
+        <div style="position:absolute;top:1rem;left:1rem;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:.35rem .75rem;font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;color:#ef4444;text-transform:uppercase;">Before</div>
+        <div style="position:absolute;top:1rem;right:1rem;background:rgba(2,8,24,.8);backdrop-filter:blur(8px);border:1px solid rgba(59,130,246,.25);border-radius:6px;padding:.35rem .75rem;font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;color:var(--blue);text-transform:uppercase;">After</div>
+      </div>
+      
+      <p style="text-align:center;color:var(--muted);font-size:.82rem;margin-top:1rem;font-family:var(--mono);">← Drag to compare →</p>
+    </div>
+  </div>
+</section>
+
+<div class="grad-divider" style="max-width:1280px;margin:0 auto;"></div>
+
+<!-- ═══════════════════════════════════ TESTIMONIALS ══════════════════════════ -->
+<section id="testimonials" style="padding:8rem 0;overflow:hidden;">
+  <div style="max-width:1280px;margin:0 auto;padding:0 2rem;">
+    <div style="text-align:center;margin-bottom:4rem;" class="reveal">
+      <div class="section-label" style="justify-content:center;margin-bottom:1rem;">Client Love</div>
+      <h2 class="section-title">What Clients Say</h2>
+    </div>
+
+    <div style="position:relative;overflow:hidden;" class="reveal">
+      <div id="testi-viewport" style="overflow:hidden;">
+        <div id="testi-track" class="testi-track">
+          
+          <!-- RetailPro Store -->
+          <div class="testi-card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;">
+              <div class="stars">★★★★★</div>
+              <div style="font-family:var(--mono);font-size:.65rem;color:var(--blue);letter-spacing:.08em;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);padding:.2rem .6rem;border-radius:4px;">RetailPro Store</div>
+            </div>
+            <p style="color:var(--muted);font-size:.92rem;line-height:1.8;margin-bottom:1.5rem;font-style:italic;">"Our online store presence was zero before this. Harichandan built us a site that genuinely looks world-class. Customer inquiries tripled within the first month — we couldn't be happier with the result!"</p>
+            <div style="display:flex;align-items:center;gap:.75rem;">
+              <div class="avatar" style="background:linear-gradient(135deg,var(--blue),var(--purple))">R</div>
+              <div>
+                <div style="font-weight:600;font-size:.9rem;">Rakesh Panda</div>
+                <div style="font-size:.78rem;color:var(--muted);">Owner, RetailPro Store</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Designer Portfolio -->
+          <div class="testi-card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;">
+              <div class="stars">★★★★★</div>
+              <div style="font-family:var(--mono);font-size:.65rem;color:var(--purple);letter-spacing:.08em;background:rgba(168,85,247,.08);border:1px solid rgba(168,85,247,.2);padding:.2rem .6rem;border-radius:4px;">Designer Portfolio</div>
+            </div>
+            <p style="color:var(--muted);font-size:.92rem;line-height:1.8;margin-bottom:1.5rem;font-style:italic;">"I needed a portfolio that could compete internationally. Harichandan delivered something my peers were genuinely blown away by. I landed 3 freelance contracts within the first two weeks of going live!"</p>
+            <div style="display:flex;align-items:center;gap:.75rem;">
+              <div class="avatar" style="background:linear-gradient(135deg,var(--purple),#ec4899)">P</div>
+              <div>
+                <div style="font-weight:600;font-size:.9rem;">Priya Nair</div>
+                <div style="font-size:.78rem;color:var(--muted);">Freelance UI Designer, Bengaluru</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Spice Garden Restaurant -->
+          <div class="testi-card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;">
+              <div class="stars">★★★★★</div>
+              <div style="font-family:var(--mono);font-size:.65rem;color:#f59e0b;letter-spacing:.08em;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);padding:.2rem .6rem;border-radius:4px;">Spice Garden</div>
+            </div>
+            <p style="color:var(--muted);font-size:.92rem;line-height:1.8;margin-bottom:1.5rem;font-style:italic;">"Our old site was an embarrassment. The new one is stunning — customers regularly tell us they chose to dine with us specifically because the website looked so professional. Bookings are up 60%!"</p>
+            <div style="display:flex;align-items:center;gap:.75rem;">
+              <div class="avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">A</div>
+              <div>
+                <div style="font-weight:600;font-size:.9rem;">Arjun Singh</div>
+                <div style="font-size:.78rem;color:var(--muted);">Owner, Spice Garden Restaurant</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SaaS Product Launch -->
+          <div class="testi-card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;">
+              <div class="stars">★★★★★</div>
+              <div style="font-family:var(--mono);font-size:.65rem;color:var(--cyan);letter-spacing:.08em;background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.2);padding:.2rem .6rem;border-radius:4px;">SaaS Launch Page</div>
+            </div>
+            <p style="color:var(--muted);font-size:.92rem;line-height:1.8;margin-bottom:1.5rem;font-style:italic;">"We hit a 38% signup conversion rate on launch day — far beyond what we expected. Harichandan understood our product deeply and built a page that communicated our value better than we could ourselves."</p>
+            <div style="display:flex;align-items:center;gap:.75rem;">
+              <div class="avatar" style="background:linear-gradient(135deg,var(--cyan),var(--blue))">K</div>
+              <div>
+                <div style="font-weight:600;font-size:.9rem;">Karan Malhotra</div>
+                <div style="font-size:.78rem;color:var(--muted);">Co-Founder, SaaS Product Launch</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lens & Light Portfolio -->
+          <div class="testi-card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;">
+              <div class="stars">★★★★★</div>
+              <div style="font-family:var(--mono);font-size:.65rem;color:var(--blue);letter-spacing:.08em;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);padding:.2rem .6rem;border-radius:4px;">Lens & Light</div>
+            </div>
+            <p style="color:var(--muted);font-size:.92rem;line-height:1.8;margin-bottom:1.5rem;font-style:italic;">"My photography finally has a home that does it justice. The parallax scrolling and fullscreen gallery are absolutely breathtaking. Within the first month I had 5 new client inquiries directly from the site!"</p>
+            <div style="display:flex;align-items:center;gap:.75rem;">
+              <div class="avatar" style="background:linear-gradient(135deg,#60a5fa,var(--cyan))">N</div>
+              <div>
+                <div style="font-weight:600;font-size:.9rem;">Neha Kulkarni</div>
+                <div style="font-size:.78rem;color:var(--muted);">Photographer, Lens & Light Portfolio</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FitCoach Lead Page -->
+          <div class="testi-card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;">
+              <div class="stars">★★★★★</div>
+              <div style="font-family:var(--mono);font-size:.65rem;color:var(--purple);letter-spacing:.08em;background:rgba(168,85,247,.08);border:1px solid rgba(168,85,247,.2);padding:.2rem .6rem;border-radius:4px;">FitCoach Page</div>
+            </div>
+            <p style="color:var(--muted);font-size:.92rem;line-height:1.8;margin-bottom:1.5rem;font-style:italic;">"200+ leads in the very first week — I was shocked. Harichandan didn't just build a page, he built a lead machine. The urgency design, the layout, everything was perfectly thought through. 10/10!"</p>
+            <div style="display:flex;align-items:center;gap:.75rem;">
+              <div class="avatar" style="background:linear-gradient(135deg,var(--purple),#f43f5e)">S</div>
+              <div>
+                <div style="font-weight:600;font-size:.9rem;">Sameer Joshi</div>
+                <div style="font-size:.78rem;color:var(--muted);">Personal Trainer, FitCoach</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      
+      <!-- Nav -->
+      <div style="display:flex;justify-content:center;align-items:center;gap:1rem;margin-top:2.5rem;">
+        <button id="testi-prev" style="width:44px;height:44px;border-radius:10px;border:1px solid var(--glass-border);background:var(--glass);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;" onmouseenter="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseleave="this.style.borderColor='var(--glass-border)';this.style.color='var(--muted)'">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <div id="testi-dots" style="display:flex;gap:.5rem;"></div>
+        <button id="testi-next" style="width:44px;height:44px;border-radius:10px;border:1px solid var(--glass-border);background:var(--glass);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;" onmouseenter="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseleave="this.style.borderColor='var(--glass-border)';this.style.color='var(--muted)'">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="grad-divider" style="max-width:1280px;margin:0 auto;"></div>
+
+<!-- ═══════════════════════════════════ PRICING ════════════════════════════════ -->
+<section id="pricing" style="padding:8rem 0;">
+  <div style="max-width:1280px;margin:0 auto;padding:0 2rem;">
+    <div style="text-align:center;margin-bottom:4rem;" class="reveal">
+      <div class="section-label" style="justify-content:center;margin-bottom:1rem;">Investment</div>
+      <h2 class="section-title">Transparent Pricing</h2>
+      <p style="color:var(--muted);margin-top:1rem;font-size:.95rem;">No hidden fees. No surprises. Just clear value.</p>
+      <div style="display:inline-flex;align-items:center;gap:.5rem;margin-top:1rem;padding:.4rem 1rem;border-radius:100px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);">
+        <div style="width:7px;height:7px;border-radius:50%;background:#ef4444;animation:ping-dot 1.5s infinite"></div>
+        <span style="font-family:var(--mono);font-size:.72rem;color:#ef4444;letter-spacing:.1em">LIMITED SLOTS — Only 3 projects this month</span>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;align-items:stretch;">
+      
+      <!-- Starter -->
+      <div class="pricing-card reveal stagger-1">
+        <div style="font-family:var(--mono);font-size:.72rem;color:var(--muted);letter-spacing:.12em;margin-bottom:1rem;text-transform:uppercase;">Starter</div>
+        <div style="display:flex;align-items:baseline;gap:.3rem;margin-bottom:.5rem;">
+          <span style="font-family:var(--serif);font-size:3rem;font-weight:700;color:var(--text);">₹9,999</span>
+        </div>
+        <p style="color:var(--muted);font-size:.85rem;margin-bottom:2rem;line-height:1.6;">Perfect for individuals and small businesses starting online.</p>
+        <div style="margin-bottom:2rem;">
+          <div class="check-item"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Up to 3 pages</div>
+          <div class="check-item"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Responsive design</div>
+          <div class="check-item"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Contact form</div>
+          <div class="check-item"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Basic SEO setup</div>
+          <div class="check-item"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>3-day delivery</div>
+          <div class="check-item" style="opacity:.35;text-decoration:line-through;"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>Animations & effects</div>
+          <div class="check-item" style="opacity:.35;text-decoration:line-through;"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>1 month support</div>
+        </div>
+        <a href="#contact" class="btn-ghost" style="display:block;text-align:center;text-decoration:none;">Choose Starter</a>
+      </div>
+
+      <!-- Business (Featured) -->
+      <div class="pricing-card featured reveal stagger-2" style="transform:scale(1.03);">
+        <div class="popular-badge">✦ Most Popular</div>
+        <div style="font-family:var(--mono);font-size:.72rem;color:var(--blue);letter-spacing:.12em;margin-bottom:1rem;text-transform:uppercase;">Business</div>
+        <div style="display:flex;align-items:baseline;gap:.3rem;margin-bottom:.5rem;">
+          <span style="font-family:var(--serif);font-size:3rem;font-weight:700;" class="grad2">₹14,999</span>
+        </div>
+        <p style="color:var(--muted);font-size:.85rem;margin-bottom:2rem;line-height:1.6;">For businesses serious about online growth and conversions.</p>
+        <div style="margin-bottom:2rem;">
+          <div class="check-item"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Up to 7 pages</div>
+          <div class="check-item"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Premium responsive design</div>
+          <div class="check-item"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Animations & interactions</div>
+          <div class="check-item"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Advanced SEO</div>
+          <div class="check-item"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>5-day delivery</div>
+          <div class="check-item"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>1 month support</div>
+          <div class="check-item"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Google Analytics setup</div>
+        </div>
+        <a href="#contact" class="btn-primary" style="display:block;text-align:center;text-decoration:none;"><span>Choose Business</span></a>
+      </div>
+
+      <!-- Premium -->
+      <div class="pricing-card reveal stagger-3">
+        <div style="font-family:var(--mono);font-size:.72rem;color:var(--purple);letter-spacing:.12em;margin-bottom:1rem;text-transform:uppercase;">Premium Portfolio</div>
+        <div style="display:flex;align-items:baseline;gap:.3rem;margin-bottom:.5rem;">
+          <span style="font-family:var(--serif);font-size:3rem;font-weight:700;color:var(--purple);">₹19,999</span>
+        </div>
+        <p style="color:var(--muted);font-size:.85rem;margin-bottom:2rem;line-height:1.6;">The ultimate portfolio for creatives and professionals who want to stand out globally.</p>
+        <div style="margin-bottom:2rem;">
+          <div class="check-item"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Unlimited pages</div>
+          <div class="check-item"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Custom animations & effects</div>
+          <div class="check-item"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Advanced interactions</div>
+          <div class="check-item"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Full SEO optimization</div>
+          <div class="check-item"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>7-day delivery</div>
+          <div class="check-item"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>3 months support</div>
+          <div class="check-item"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Priority revisions</div>
+        </div>
+        <a href="#contact" class="btn-ghost" style="display:block;text-align:center;text-decoration:none;border-color:rgba(168,85,247,.3);color:var(--purple);" onmouseenter="this.style.borderColor='var(--purple)';this.style.background='rgba(168,85,247,.08)'" onmouseleave="this.style.borderColor='rgba(168,85,247,.3)';this.style.background='transparent'">Choose Premium</a>
+      </div>
+
+    </div>
+
+    <p style="text-align:center;color:var(--muted);font-size:.82rem;margin-top:2rem;">All prices in INR. Need a custom quote? <a href="#contact" style="color:var(--blue);text-decoration:none;">Let's talk →</a></p>
+  </div>
+</section>
+
+<div class="grad-divider" style="max-width:1280px;margin:0 auto;"></div>
+
+<!-- ═══════════════════════════════════ CTA BANNER ════════════════════════════ -->
+<section style="padding:6rem 0;position:relative;overflow:hidden;">
+  <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(59,130,246,.06),rgba(168,85,247,.06));"></div>
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:300px;background:radial-gradient(circle,rgba(59,130,246,.15),transparent 70%);border-radius:50%;filter:blur(40px);pointer-events:none;"></div>
+  <div style="max-width:1280px;margin:0 auto;padding:0 2rem;text-align:center;position:relative;z-index:1;" class="reveal">
+    <div class="section-label" style="justify-content:center;margin-bottom:1rem;">Ready to Start?</div>
+    <h2 class="section-title" style="margin-bottom:1rem;">
+      Let's Build Something That<br><span class="grad">Grows Your Business</span>
+    </h2>
+    <p style="color:var(--muted);font-size:1rem;margin-bottom:2.5rem;max-width:500px;margin-left:auto;margin-right:auto;line-height:1.7">Stop losing clients to competitors with better websites. Let's change that — starting today.</p>
+    <div style="display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;">
+      <a href="#contact" class="btn-primary" style="font-size:1rem;padding:1rem 2.5rem;"><span>✦ Start a Project</span></a>
+      <a href="#pricing" class="btn-ghost" style="font-size:1rem;padding:1rem 2.5rem;">View Pricing</a>
+    </div>
+  </div>
+</section>
+
+<div class="grad-divider" style="max-width:1280px;margin:0 auto;"></div>
+
+<!-- ═══════════════════════════════════ CONTACT ════════════════════════════════ -->
+<section id="contact" style="padding:8rem 0;">
+  <div style="max-width:1280px;margin:0 auto;padding:0 2rem;">
+    <div style="display:grid;grid-template-columns:1fr 1.3fr;gap:5rem;align-items:start;" class="contact-grid">
+      
+      <!-- Left -->
+      <div class="reveal-left">
+        <div class="section-label" style="margin-bottom:1rem;">Get In Touch</div>
+        <h2 class="section-title" style="margin-bottom:1.5rem;">Let's Create Something <span class="grad">Remarkable</span></h2>
+        <div class="line-accent" style="margin-bottom:1.5rem;"></div>
+        <p style="color:var(--muted);line-height:1.9;font-size:.95rem;margin-bottom:2.5rem;">Have a project in mind? I'd love to hear about it. Drop a message and I'll get back to you within 24 hours.</p>
+        
+        <div style="display:flex;flex-direction:column;gap:1.5rem;margin-bottom:2.5rem;">
+          <div style="display:flex;align-items:center;gap:1rem;">
+            <div style="width:44px;height:44px;border-radius:10px;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="18" height="18" fill="none" stroke="var(--blue)" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div>
+              <div style="font-size:.78rem;color:var(--muted);font-family:var(--mono);letter-spacing:.08em;margin-bottom:.2rem">EMAIL</div>
+              <div style="color:var(--text);font-size:.95rem;">harichandanprusty96@gmail.com</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:1rem;">
+            <div style="width:44px;height:44px;border-radius:10px;background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="18" height="18" fill="none" stroke="var(--purple)" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.06 1.22 2 2 0 012.06 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92z"/></svg>
+            </div>
+            <div>
+              <div style="font-size:.78rem;color:var(--muted);font-family:var(--mono);letter-spacing:.08em;margin-bottom:.2rem">WHATSAPP</div>
+              <div style="color:var(--text);font-size:.95rem;">+91 98748 22668</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:1rem;">
+            <div style="width:44px;height:44px;border-radius:10px;background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="18" height="18" fill="none" stroke="var(--cyan)" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div>
+              <div style="font-size:.78rem;color:var(--muted);font-family:var(--mono);letter-spacing:.08em;margin-bottom:.2rem">LOCATION</div>
+              <div style="color:var(--text);font-size:.95rem;">Odisha, India</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Socials -->
+        <div>
+          <div style="font-size:.78rem;color:var(--muted);font-family:var(--mono);letter-spacing:.1em;margin-bottom:.8rem;text-transform:uppercase;">Find Me On</div>
+          <div style="display:flex;gap:.75rem;">
+            <a href="https://www.instagram.com/harryhaze2010/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="#" class="social-link" aria-label="LinkedIn">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="#" class="social-link" aria-label="GitHub">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+            </a>
+            <a href="#" class="social-link" aria-label="Twitter/X">
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Form -->
+      <div class="reveal-right">
+        <div class="glass" style="border-radius:20px;padding:2.5rem;border:1px solid var(--glass-border);">
+          <h3 class="serif" style="font-size:1.5rem;font-weight:600;margin-bottom:1.5rem;">Tell Me About Your Project</h3>
+          <form id="contact-form" style="display:flex;flex-direction:column;gap:1.25rem;" onsubmit="submitForm(event)">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+              <div class="form-group">
+                <label class="form-label" for="name">Your Name</label>
+                <input class="form-input" type="text" id="name" placeholder="Rahul Mehta" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="email">Email Address</label>
+                <input class="form-input" type="email" id="email" placeholder="hello@example.com" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="project-type">Project Type</label>
+              <select class="form-input" id="project-type" required>
+                <option value="" disabled selected>Select project type</option>
+                <option>Business Website</option>
+                <option>Personal Portfolio</option>
+                <option>Landing Page</option>
+                <option>Website Revamp</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="budget">Budget Range</label>
+              <select class="form-input" id="budget">
+                <option value="" disabled selected>Select your budget</option>
+                <option>Under ₹10,000</option>
+                <option>₹10,000 – ₹15,000</option>
+                <option>₹15,000 – ₹20,000</option>
+                <option>₹20,000+</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="message">Your Message</label>
+              <textarea class="form-input" id="message" rows="4" placeholder="Tell me about your project, goals, and timeline..." style="resize:none;"></textarea>
+            </div>
+            <button type="submit" class="btn-primary" id="submit-btn" style="width:100%;justify-content:center;padding:1rem;">
+              <span id="btn-text">Send Message ✦</span>
+            </button>
+            <div id="form-success" style="display:none;text-align:center;padding:1rem;border-radius:8px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:#22c55e;font-size:.9rem;">
+              ✓ Message sent! I'll reply within 24 hours.
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ FOOTER ════════════════════════════════ -->
+<footer style="border-top:1px solid var(--glass-border);padding:3rem 0;background:var(--navy2);">
+  <div style="max-width:1280px;margin:0 auto;padding:0 2rem;">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.5rem;">
+      <div>
+        <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.5rem;">
+          <div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:1rem;font-weight:700;color:#fff;">H</div>
+          <span style="font-family:var(--serif);font-size:1rem;font-weight:600;color:var(--text);">Harichandan Prusty</span>
+        </div>
+        <p style="color:var(--muted);font-size:.82rem;">Web Developer · Odisha, India</p>
+      </div>
+      <div style="font-family:var(--mono);font-size:.75rem;color:var(--muted);text-align:center;">
+        © 2025 Harichandan Prusty. Built with ♥ and code.
+      </div>
+      <div style="display:flex;gap:.6rem;">
+        <a href="#" class="social-link" style="width:36px;height:36px;" aria-label="Instagram">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </a>
+        <a href="#" class="social-link" style="width:36px;height:36px;" aria-label="LinkedIn">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+        <a href="#" class="social-link" style="width:36px;height:36px;" aria-label="GitHub">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════ JAVASCRIPT ════════════════════════════ -->
+<script>
+// ─── CURSOR ───
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx=0, my=0, rx=0, ry=0;
+document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cursor.style.left=mx+'px'; cursor.style.top=my+'px'; });
+function animRing() { rx+=(mx-rx)*.15; ry+=(my-ry)*.15; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(animRing); }
+animRing();
+
+// ─── LOADER ───
+window.addEventListener('load', () => {
+  setTimeout(() => { document.getElementById('loader').classList.add('hidden'); }, 1500);
+});
+
+// ─── NAVBAR ───
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 50) { navbar.classList.add('scrolled'); }
+  else { navbar.classList.remove('scrolled'); }
+  // Back to top
+  document.getElementById('btt').classList.toggle('show', window.scrollY > 400);
+});
+
+// ─── MOBILE MENU ───
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobile-menu');
+const closeMenu = document.getElementById('close-menu');
+hamburger.addEventListener('click', () => { mobileMenu.classList.add('open'); document.body.style.overflow='hidden'; });
+closeMenu.addEventListener('click', () => closeMobile());
+mobileMenu.querySelectorAll('.mobile-nav-link').forEach(l => l.addEventListener('click', () => closeMobile()));
+function closeMobile() { mobileMenu.classList.remove('open'); document.body.style.overflow=''; }
+document.addEventListener('keydown', e => { if(e.key==='Escape') { closeMobile(); closeLightbox(); } });
+
+// ─── SCROLL REVEAL ───
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => observer.observe(el));
+
+// ─── BACK TO TOP ───
+document.getElementById('btt').addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
+
+// ─── PROJECT FILTER ───
+const filterBtns = document.querySelectorAll('.filter-btn');
+filterBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    document.querySelectorAll('.project-card').forEach(card => {
+      const match = filter === 'all' || card.dataset.category === filter;
+      card.style.display = match ? 'block' : 'none';
+      if(match) { card.style.animation = 'fadeIn .4s ease forwards'; }
+    });
+  });
+});
+
+// ─── PROJECT DATA ───
+const projects = [
+  { title: 'RetailPro Store', category: 'Business', emoji: '🏪', color: '#0f2040', desc: 'A complete business website for a retail company featuring a product showcase, about section, testimonials carousel, and a lead-capture contact form. Optimized for local SEO and mobile users.', features: ['Product showcase grid','Customer testimonials','Lead capture form','Google Maps integration','Mobile responsive'], tags: ['HTML5', 'CSS3', 'JavaScript', 'Tailwind CSS'], demo: '#' },
+  { title: 'Designer Portfolio', category: 'Portfolio', emoji: '👩‍💻', color: '#1a0533', desc: 'A visually stunning dark portfolio for a senior UI/UX designer. Features animated case studies, a filterable project grid, and smooth scroll interactions designed to impress recruiters.', features: ['Animated hero section','Filterable project gallery','Interactive case studies','Smooth scroll animations','Dark premium aesthetic'], tags: ['HTML5', 'GSAP', 'CSS3', 'Locomotive Scroll'], demo: '#' },
+  { title: 'SaaS Product Launch', category: 'Landing Page', emoji: '🚀', color: '#001a1a', desc: 'A high-converting SaaS landing page with a 38% signup conversion rate. Built with a clear value proposition, feature comparison, social proof, and an optimized CTA funnel.', features: ['Hero with CTA above fold','Feature comparison table','Pricing section','Testimonials carousel','38% conversion rate achieved'], tags: ['HTML5', 'Tailwind CSS', 'Vanilla JS', 'CSS Animations'], demo: '#' },
+  { title: 'Spice Garden Restaurant', category: 'Business', emoji: '🍽️', color: '#1a1000', desc: 'A warm, visually rich restaurant website with an interactive menu, photo gallery, table booking system, and customer reviews. Significantly increased online reservations.', features: ['Interactive menu with filters','Photo gallery lightbox','Table booking form','Location & hours info','Online reservation system'], tags: ['HTML5', 'CSS3', 'JavaScript'], demo: '#' },
+  { title: 'Lens & Light Portfolio', category: 'Portfolio', emoji: '📸', color: '#001422', desc: 'A fullscreen photography portfolio for a wedding and event photographer. Features a masonry gallery, parallax scrolling, and a minimal contact form. Helped land 5 new clients within the first month.', features: ['Fullscreen masonry gallery','Parallax scroll effects','Lightbox image viewer','Client inquiry form','5 new client leads in month 1'], tags: ['HTML5', 'CSS Grid', 'Parallax JS', 'Vanilla JS'], demo: '#' },
+  { title: 'FitCoach Lead Page', category: 'Landing Page', emoji: '🎯', color: '#0d001a', desc: 'A high-energy fitness coaching landing page built for a personal trainer. Generated 200+ leads in week one through strategic CTA placement, social proof, and a compelling offer structure.', features: ['Bold hero with video bg','Before/after gallery','Lead capture with Mailchimp','Urgency countdown timer','200+ leads in week 1'], tags: ['HTML5', 'Tailwind CSS', 'JS', 'Mailchimp Forms'], demo: '#' }
+];
+
+// ─── LIGHTBOX ───
+function openLightbox(id) {
+  const p = projects[id];
+  document.getElementById('lightbox-content').innerHTML = `
+    <button onclick="closeLightbox()" style="position:absolute;top:1rem;right:1rem;background:none;border:none;color:var(--muted);cursor:pointer;padding:.4rem;">
+      <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start;">
+      <div>
+        <div style="width:100%;height:240px;border-radius:12px;background:linear-gradient(135deg,${p.color},${p.color}aa);display:flex;align-items:center;justify-content:center;font-size:5rem;border:1px solid var(--glass-border);margin-bottom:1.5rem;">${p.emoji}</div>
+        <div style="margin-bottom:1rem;">
+          <div style="font-family:var(--mono);font-size:.68rem;color:var(--blue);letter-spacing:.12em;margin-bottom:.4rem;text-transform:uppercase;">${p.category}</div>
+          <h2 style="font-family:var(--serif);font-size:1.8rem;font-weight:700;">${p.title}</h2>
+        </div>
+        <p style="color:var(--muted);font-size:.9rem;line-height:1.8;">${p.desc}</p>
+        <div style="margin-top:1.5rem;display:flex;flex-wrap:wrap;gap:.4rem;">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+        <a href="${p.demo}" class="btn-primary" style="margin-top:1.5rem;display:inline-flex;"><span>🔗 Live Demo</span></a>
+      </div>
+      <div>
+        <div style="background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.15);border-radius:12px;padding:1.5rem;">
+          <h3 style="font-family:var(--serif);font-size:1.1rem;font-weight:600;margin-bottom:1rem;color:var(--text);">Key Features & Results</h3>
+          ${p.features.map(f=>`<div class="check-item"><svg width="16" height="16" fill="none" stroke="var(--blue)" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>${f}</div>`).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ─── BEFORE/AFTER SLIDER ───
+const baContainer = document.getElementById('ba-container');
+const baBefore = document.getElementById('ba-before');
+const baHandle = document.getElementById('ba-handle');
+let isDragging = false;
+function updateBA(x) {
+  const rect = baContainer.getBoundingClientRect();
+  let pct = Math.min(Math.max((x - rect.left) / rect.width * 100, 5), 95);
+  baBefore.style.width = pct + '%';
+  baHandle.style.left = pct + '%';
+}
+baContainer.addEventListener('mousedown', e => { isDragging=true; updateBA(e.clientX); });
+baContainer.addEventListener('touchstart', e => { isDragging=true; updateBA(e.touches[0].clientX); }, {passive:true});
+document.addEventListener('mousemove', e => { if(isDragging) updateBA(e.clientX); });
+document.addEventListener('touchmove', e => { if(isDragging) updateBA(e.touches[0].clientX); }, {passive:true});
+document.addEventListener('mouseup', () => isDragging=false);
+document.addEventListener('touchend', () => isDragging=false);
+
+// ─── TESTIMONIALS SLIDER ───
+const track = document.getElementById('testi-track');
+const viewport = document.getElementById('testi-viewport');
+const cards = track.querySelectorAll('.testi-card');
+const dotsEl = document.getElementById('testi-dots');
+let currentSlide = 0;
+const totalSlides = cards.length;
+let perView = 3;
+function getPerView() { return window.innerWidth < 640 ? 1 : window.innerWidth < 900 ? 1 : 3; }
+
+function buildDots() {
+  perView = getPerView();
+  const totalDots = Math.ceil(totalSlides / perView);
+  dotsEl.innerHTML = '';
+  for(let i=0;i<totalDots;i++) {
+    const d = document.createElement('div');
+    d.style.cssText=`width:${i===0?20:7}px;height:7px;border-radius:4px;background:${i===0?'var(--blue)':'rgba(148,163,184,.3)'};cursor:pointer;transition:all .3s;`;
+    d.addEventListener('click',()=>goTo(i));
+    dotsEl.appendChild(d);
+  }
+}
+
+function goTo(idx) {
+  perView = getPerView();
+  const maxIdx = Math.ceil(totalSlides/perView)-1;
+  currentSlide = Math.min(Math.max(idx,0),maxIdx);
+  const cardW = cards[0].offsetWidth + 24;
+  track.style.transform = `translateX(-${currentSlide * cardW * perView}px)`;
+  dotsEl.querySelectorAll('div').forEach((d,i)=>{
+    d.style.width=i===currentSlide?'20px':'7px';
+    d.style.background=i===currentSlide?'var(--blue)':'rgba(148,163,184,.3)';
+  });
+}
+
+document.getElementById('testi-prev').addEventListener('click',()=>goTo(currentSlide-1));
+document.getElementById('testi-next').addEventListener('click',()=>goTo(currentSlide+1));
+window.addEventListener('resize',()=>{buildDots();goTo(0);});
+buildDots();
+let autoSlide = setInterval(()=>goTo(currentSlide+1 > Math.ceil(totalSlides/getPerView())-1 ? 0 : currentSlide+1),4000);
+document.getElementById('testi-prev').addEventListener('click',()=>{clearInterval(autoSlide);});
+document.getElementById('testi-next').addEventListener('click',()=>{clearInterval(autoSlide);});
+
+// ─── CONTACT FORM ───
+function submitForm(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submit-btn');
+  const txt = document.getElementById('btn-text');
+  btn.disabled = true;
+  txt.textContent = 'Sending...';
+  btn.style.opacity = '.7';
+  setTimeout(() => {
+    btn.style.display = 'none';
+    document.getElementById('form-success').style.display = 'block';
+    document.getElementById('contact-form').reset();
+  }, 1800);
+}
+
+// ─── RESPONSIVE GRID FIXES ───
+function handleResponsive() {
+  const aboutGrid = document.querySelector('.about-grid');
+  const contactGrid = document.querySelector('.contact-grid');
+  if(window.innerWidth < 900) {
+    if(aboutGrid) aboutGrid.style.gridTemplateColumns='1fr';
+    if(contactGrid) contactGrid.style.gridTemplateColumns='1fr';
+  } else {
+    if(aboutGrid) aboutGrid.style.gridTemplateColumns='1fr 1fr';
+    if(contactGrid) contactGrid.style.gridTemplateColumns='1fr 1.3fr';
+  }
+}
+window.addEventListener('resize', handleResponsive);
+handleResponsive();
+
+// ─── SMOOTH ANCHOR LINKS ───
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    const target=document.querySelector(a.getAttribute('href'));
+    if(target){e.preventDefault();target.scrollIntoView({behavior:'smooth',block:'start'});}
+  });
+});
+</script>
+
+</body>
+</html>
